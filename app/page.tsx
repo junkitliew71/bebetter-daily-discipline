@@ -58,7 +58,7 @@ export default function Home() {
     const context = (document as Document & { modelContext?: { registerTool: (tool: unknown, options?: { signal?: AbortSignal }) => unknown } }).modelContext;
     if (!context?.registerTool) return;
     const lifecycle = new AbortController();
-    const register = (tool: unknown) => { try { void Promise.resolve(context.registerTool(tool, { signal: lifecycle.signal })); } catch {} };
+    const register = (tool: unknown) => { try { void Promise.resolve(context.registerTool(tool, { signal: lifecycle.signal })).catch(() => undefined); } catch {} };
     register({ name: "add_daily_task", title: "Add daily task", description: "Add a task to today's BeBetter list.", inputSchema: { type: "object", properties: { title: { type: "string", minLength: 1 } }, required: ["title"], additionalProperties: false }, annotations: { readOnlyHint: false, untrustedContentHint: false }, execute: (input: unknown) => { const title = (input as { title?: unknown })?.title; if (typeof title !== "string" || !title.trim()) throw new Error("A non-empty title is required."); const task = addTask(title); return { id: task.id, title: task.title, completed: false }; } });
     register({ name: "read_daily_progress", title: "Read daily progress", description: "Read today's task totals and completion percentage.", inputSchema: { type: "object", properties: {}, additionalProperties: false }, annotations: { readOnlyHint: true, untrustedContentHint: false }, execute: () => ({ date: today, completed, total: tasks.length, percentage: progress }) });
     return () => lifecycle.abort();
