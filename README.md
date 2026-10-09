@@ -6,7 +6,7 @@ A lightweight daily productivity app built around one simple loop:
 
 ## Live site
 
-[Open BeBetter](https://bebetter-daily-discipline.i25032504.chatgpt.site)
+[Open BeBetter on GitHub Pages](https://junkitliew71.github.io/bebetter-daily-discipline/)
 
 ## Features
 
